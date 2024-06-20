@@ -22,7 +22,8 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
  *  - Each option should display text equal to the name of the breed.
  * This function should execute immediately.
  */
-  async function initialLoad(){
+  async function initialLoad(){    
+    let stored_breeds = [];     
     fetch(url,{headers: {
       'x-api-key': API_KEY
     }})
@@ -30,7 +31,14 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
       return response.json();
     })
     .then((data) =>{
-      console.log(data);
+      stored_breeds = data;
+      for(let i = 0; i < stored_breeds.length; i++){
+        const breed = stored_breeds[i];
+        let option = document.createElement('option');
+        option.value = breed.id;
+        option.textContent = breed.name;
+        breedSelect.appendChild(option);
+       }
     })
   }
 

@@ -12276,9 +12276,11 @@ function initialLoad() {
  */
 function _initialLoad() {
   _initialLoad = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var stored_breeds;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
+          stored_breeds = [];
           fetch(url, {
             headers: {
               'x-api-key': API_KEY
@@ -12286,9 +12288,16 @@ function _initialLoad() {
           }).then(function (response) {
             return response.json();
           }).then(function (data) {
-            console.log(data);
+            stored_breeds = data;
+            for (var i = 0; i < stored_breeds.length; i++) {
+              var breed = stored_breeds[i];
+              var option = document.createElement('option');
+              option.value = breed.id;
+              option.textContent = breed.name;
+              breedSelect.appendChild(option);
+            }
           });
-        case 1:
+        case 2:
         case "end":
           return _context.stop();
       }
@@ -12422,7 +12431,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49839" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64462" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

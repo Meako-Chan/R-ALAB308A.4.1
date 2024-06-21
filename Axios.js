@@ -24,15 +24,15 @@ let descriptions = [];
  */
 initialLoad();
   async function initialLoad(){    
-    let stored_breeds = [];     
-    fetch(url,{headers: {
+    let stored_breeds = [];
+
+    let config = {headers: {
       'x-api-key': API_KEY
-    }})
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) =>{
-      stored_breeds = data;
+    }
+    }
+
+  const response = await axios.get(url, config);
+  stored_breeds = response.data;
       for(let i = 0; i < stored_breeds.length; i++){
         const breed = stored_breeds[i];
         let option = document.createElement('option');
@@ -46,7 +46,6 @@ initialLoad();
         descriptions.push(info);    
        }
       handleBreedSelect();
-    })
 
   }
 
@@ -75,29 +74,25 @@ initialLoad();
       return;
     }
     Carousel.clear();
-
-    fetch(url,{headers: {
+    let config = {headers: {
       'x-api-key': API_KEY
-    }})
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) =>{
-      const infoDump = document.getElementById('infoDump');
-      stored_breeds = data;
-      for(let i = 0; i < stored_breeds.length; i++){
+    }
+  }
+    const response = await axios.get(url, config);
+    console.log(response);
+    stored_breeds = response.data;
+    for(let i = 0; i < stored_breeds.length; i++){
         let image_src = stored_breeds[i].image.url;
         let image_alt = stored_breeds[i].image.alt;
         let image = Carousel.createCarouselItem(image_src, image_alt, 1);
         Carousel.appendCarousel(image);
       }    
       Carousel.start();
-    })
     const info = descriptions.find(item => {
       return item.id == breed
     })
     infoDump.innerHTML = info.description
-   
+    
   }
 
 

@@ -13,7 +13,7 @@ const getFavouritesBtn = document.getElementById("getFavouritesBtn");
 // Step 0: Store your API key here for reference and easy access.
 const url = `https://api.thecatapi.com/v1/breeds`;
 const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsLvxbORq";
-
+let descriptions = [];
 /**
  * 1. Create an async function "initialLoad" that does the following:
  * - Retrieve a list of breeds from the cat API using fetch().
@@ -38,6 +38,11 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
         option.value = breed.id;
         option.textContent = breed.name;
         breedSelect.appendChild(option);
+        let info = {
+          id : stored_breeds[i].id,
+          description: stored_breeds[i].description
+        }
+        descriptions.push(info);    
        }
       handleBreedSelect();
     })
@@ -61,13 +66,15 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
   breedSelect.addEventListener('change', handleBreedSelect);
   async function handleBreedSelect(e){
     let stored_breeds = [];
+    
     const breedSelect = document.getElementById("breedSelect");
     const breed = breedSelect.value;
-    console.log(breed);
+    // console.log(breed);
     if(!breed){
       return;
     }
     Carousel.clear();
+
     fetch(url,{headers: {
       'x-api-key': API_KEY
     }})
@@ -82,9 +89,13 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
         let image_alt = stored_breeds[i].image.alt;
         let image = Carousel.createCarouselItem(image_src, image_alt, 1);
         Carousel.appendCarousel(image);
-      }             
+      }    
       Carousel.start();
     })
+    const info = descriptions.find(item => {
+      return item.id == breed
+    })
+    infoDump.innerHTML = info.description
    
   }
 

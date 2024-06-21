@@ -58,13 +58,16 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
  * - Each new selection should clear, re-populate, and restart the Carousel.
  * - Add a call to this function to the end of your initialLoad function above to create the initial carousel.
  */
-  async function handleBreedSelect(){
+  breedSelect.addEventListener('change', handleBreedSelect);
+  async function handleBreedSelect(e){
     let stored_breeds = [];
     const breedSelect = document.getElementById("breedSelect");
     const breed = breedSelect.value;
+    console.log(breed);
     if(!breed){
       return;
     }
+    Carousel.clear();
     fetch(url,{headers: {
       'x-api-key': API_KEY
     }})
@@ -80,7 +83,7 @@ const API_KEY = "live_85rthUAxeQJYmhfIXXj6cj5KxmgDDU8TX3QTidzapXRo83lqnIfwgsDGsL
         let image = Carousel.createCarouselItem(image_src, image_alt, 1);
         Carousel.appendCarousel(image);
       }             
-
+      Carousel.start();
     })
    
   }

@@ -9,6 +9,8 @@ const infoDump = document.getElementById("infoDump");
 const progressBar = document.getElementById("progressBar");
 // The get favourites button element.
 const getFavouritesBtn = document.getElementById("getFavouritesBtn");
+//Get Body for Step 7
+const body = document.querySelector("body");
 
 // Step 0: Store your API key here for reference and easy access.
 const url = `https://api.thecatapi.com/v1/breeds`;
@@ -122,6 +124,8 @@ initialLoad();
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
 axios.interceptors.request.use(function (config) {
+  
+  body.style.cursor = 'progress';
   progressBar.style.width = '0%';
   config.metadata = { startTime: new Date()}
   return config;
@@ -133,6 +137,7 @@ axios.interceptors.response.use(function (response) {
   response.config.metadata.endTime = new Date();
   response.duration = response.config.metadata.endTime - response.config.metadata.startTime;
   console.log(`Axios call took ${response.duration} milliseconds.`);
+  body.style.cursor = 'default';
   return response;
 }, function (error) {
   return Promise.reject(error);
@@ -153,6 +158,7 @@ axios.interceptors.response.use(function (response) {
  *   with for future projects.
  */
   function updateProgress(ProgressEvent){ 
+    console.log(ProgressEvent);
     let width = ProgressEvent.progress * 100;
     progressBar.style.width = `${width}%`;
   }

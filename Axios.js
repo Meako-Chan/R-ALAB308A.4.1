@@ -69,14 +69,17 @@ initialLoad();
     
     const breedSelect = document.getElementById("breedSelect");
     const breed = breedSelect.value;
-    // console.log(breed);
     if(!breed){
       return;
     }
-    
-    let config = {headers: {
-      'x-api-key': API_KEY
-    }
+     
+    let config = {
+      headers: {
+      'x-api-key': API_KEY,
+      },
+      onDownloadProgress:(progressEvent)=>{
+        updateProgress(progressEvent);
+      }            
   }
   try{
     Carousel.clear();
@@ -119,7 +122,7 @@ initialLoad();
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
 axios.interceptors.request.use(function (config) {
- 
+  progressBar.style.width = '0%';
   config.metadata = { startTime: new Date()}
   return config;
 }, function (error) {
@@ -149,7 +152,10 @@ axios.interceptors.response.use(function (response) {
  *   once or twice per request to this API. This is still a concept worth familiarizing yourself
  *   with for future projects.
  */
-
+  function updateProgress(ProgressEvent){ 
+    let width = ProgressEvent.progress * 100;
+    progressBar.style.width = `${width}%`;
+  }
 /**
  * 7. As a final element of progress indication, add the following to your axios interceptors:
  * - In your request interceptor, set the body element's cursor style to "progress."

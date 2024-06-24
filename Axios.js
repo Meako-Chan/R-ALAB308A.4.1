@@ -73,13 +73,15 @@ initialLoad();
     if(!breed){
       return;
     }
-    Carousel.clear();
+    
     let config = {headers: {
       'x-api-key': API_KEY
     }
   }
+  try{
+    Carousel.clear();
     const response = await axios.get(url, config);
-    console.log(response);
+  
     stored_breeds = response.data;
     for(let i = 0; i < stored_breeds.length; i++){
         let image_src = stored_breeds[i].image.url;
@@ -92,7 +94,9 @@ initialLoad();
       return item.id == breed
     })
     infoDump.innerHTML = info.description
-    
+  } catch(error){
+    console.log(error);
+  }
   }
 
 
@@ -114,7 +118,22 @@ initialLoad();
  * - Add a console.log statement to indicate when requests begin.
  * - As an added challenge, try to do this on your own without referencing the lesson material.
  */
+axios.interceptors.request.use(function (config) {
+ 
+  config.metadata = { startTime: new Date()}
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
 
+axios.interceptors.response.use(function (response) {
+  response.config.metadata.endTime = new Date();
+  response.duration = response.config.metadata.endTime - response.config.metadata.startTime;
+  console.log(`Axios call took ${response.duration} milliseconds.`);
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
 /**
  * 6. Next, we'll create a progress bar to indicate the request is in progress.
  * - The progressBar element has already been created for you.
